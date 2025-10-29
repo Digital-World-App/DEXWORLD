@@ -11,17 +11,24 @@ lerna-debug.log*
 node_modules/
 dexworld-admin/node_modules/
 
-# Frontend build output
+# Build output
+dist/
+dist-ssr/
 dexworld-admin/dist/
 dexworld-admin/dist-ssr/
 
 # Rust/Tauri build artifacts
 /target/
 
+# Local environment variables
+*.local
+.env.local
+
 # Editor directories and files
 .vscode/
 .idea/
 .DS_Store
 
-# Nix & Direnv
+# Nix & Direnv state
 .direnv/
+result*
