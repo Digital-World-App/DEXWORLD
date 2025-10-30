@@ -1,14 +1,26 @@
 [package]
 name = "dexworld-admin"
 version = "0.1.0"
+description = "A Tauri App"
+authors = ["you"]
+license = ""
+repository = ""
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [build-dependencies]
-tauri-build = { version = "2.0.0-beta.18", features = [] }
+# Alinhado com a versão do tauri core
+tauri-build = { version = "2.0.0-beta.21", features = [] }
 
 [dependencies]
+# Versão mais recente que estava no seu ficheiro
 tauri = { version = "2.0.0-beta.21", features = [] }
+
+# Adicionados plugins que estavam em falta mas são usados no código
+tauri-plugin-stronghold = { version = "2.0.0-beta.8" }
+tauri-plugin-http = { version = "2.0.0-beta.5" }
+tauri-plugin-opener = { version = "2.0.0-beta.5" }
+
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"

@@ -1,27 +1,22 @@
-{pkgs}: {
-  channel = "stable-24.05";
+
+{ pkgs, ... }: {
+  # Entradas para as ferramentas e pacotes do seu ambiente
   packages = [
-    pkgs.nodejs_20
+    # O compilador Rust e o gerenciador de pacotes Cargo
+    pkgs.rust-bin.stable.latest.default
+    
+    # Dependências do Tauri para compilação no Linux
+    pkgs.webkitgtk
+    pkgs.gtk3
+    pkgs.cairo
+    pkgs.gdk-pixbuf
+    pkgs.glib
+    pkgs.dbus
+    pkgs.openssl
+    pkgs.librsvg
+
+    # Node.js e npm (essenciais para o frontend)
+    pkgs.nodejs
   ];
-  idx.extensions = [
-    "svelte.svelte-vscode"
-    "vue.volar"
-  ];
-  idx.previews = {
-    previews = {
-      web = {
-        command = [
-          "npm"
-          "run"
-          "dev"
-          "--"
-          "--port"
-          "$PORT"
-          "--host"
-          "0.0.0.0"
-        ];
-        manager = "web";
-      };
-    };
-  };
+  # Adicionando um comentário para forçar a recarga do ambiente.
 }

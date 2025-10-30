@@ -1,25 +1,19 @@
 {
   "productName": "dexworld-admin",
   "version": "0.1.0",
-  "identifier": "com.tauri.dev",
+  "identifier": "com.dexworld.admin",
   "build": {
     "beforeDevCommand": "npm run dev",
-    "beforeBuildCommand": "npm run build",
-    "devUrl": "http://localhost:5173",
-    "frontendDist": "../dist"
+    "beforeBuildCommand": "npm run build"
   },
   "app": {
     "windows": [
       {
-        "title": "Mundo Digital",
-        "width": 800,
-        "height": 600,
-        "resizable": true,
-        "fullscreen": false
+        "title": "Dexworld Admin"
       }
-    ],
-    "security": {
-      "csp": null
-    }
+    ]
+  },
+  "bundle": {
+    "active": true
   }
 }
