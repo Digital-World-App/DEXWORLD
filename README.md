@@ -57,17 +57,16 @@ Nossa abordagem é:
 
 ## 🛠️ Stack de Tecnologia
 
-Esta seção detalha as principais tecnologias e versões utilizadas no projeto, garantindo um ambiente de desenvolvimento consistente. As versões listadas são baseadas nos arquivos `package.json`, `src-tauri/Cargo.toml` e no ambiente Nix.
+Esta seção detalha as principais tecnologias e versões utilizadas no projeto, garantindo um ambiente de desenvolvimento consistente. As versões listadas são baseadas nos arquivos `package.json` e `src-tauri/Cargo.toml`.
 
 ### Ambiente de Desenvolvimento
 
 | Tecnologia | Função | Versão Utilizada |
 | :--- | :--- | :--- |
-| **Nix** | Gerenciador de ambiente de desenvolvimento | (Conforme `flake.nix`) |
-| **Rust** | Linguagem do backend (core do Tauri) | (Conforme `flake.nix`) |
-| **Node.js**| Ambiente de execução para o frontend (Vite, pnpm) | `21.7.2` |
-| **pnpm** | Gerenciador de pacotes do Node.js | (Conforme `flake.nix`) |
-| **Tauri CLI**| Ferramenta de linha de comando para Tauri v2 | `=2.0.0-rc.11` |
+| **Rust** | Linguagem do backend (core do Tauri) | (Conforme `src-tauri/Cargo.toml`) |
+| **Node.js**| Ambiente de execução para o frontend | `^18.0.0` ou superior |
+| **npm** | Gerenciador de pacotes do Node.js | `^9.0.0` ou superior |
+| **Tauri CLI**| Ferramenta de linha de comando para Tauri v2 | `^2.0.0-beta.16` |
 
 ### Backend (Rust Crates)
 
@@ -75,11 +74,11 @@ Dependências gerenciadas pelo `src-tauri/Cargo.toml`.
 
 | Dependência (Crate) | Função | Versão |
 | :--- | :--- | :--- |
-| **tauri** | Framework principal do backend nativo | `=2.0.0-rc.11` |
-| **tauri-build** | Ferramenta de compilação do Tauri | `=2.0.0-rc.11` |
-| **tauri-plugin-stronghold** | Armazenamento seguro de chaves | `=2.0.0-rc.11` (com `sqlite`) |
-| **tauri-plugin-http** | Cliente HTTP para o backend Rust | `=2.0.0-rc.11` |
-| **tauri-plugin-shell** | Interação com o shell do SO | `=2.0.0-rc.11` |
+| **tauri** | Framework principal do backend nativo | `^2.0.0-beta.8` |
+| **tauri-build** | Ferramenta de compilação do Tauri | (Conforme `Cargo.toml`) |
+| **tauri-plugin-stronghold** | Armazenamento seguro de chaves | `^2.0.0-beta.6` |
+| **tauri-plugin-http** | Cliente HTTP para o backend Rust | `^2.0.0-beta.4` |
+| **tauri-plugin-shell** | Interação com o shell do SO | `^2.0.0-beta.4` |
 | **serde / serde_json** | Serialização/Desserialização de dados | `1.0` |
 
 ### Frontend (JavaScript/TypeScript)
@@ -88,15 +87,16 @@ Dependências gerenciadas pelo `package.json`.
 
 | Categoria | Dependência | Função | Versão |
 | :--- | :--- | :--- | :--- |
-| **Core** | **React** | Biblioteca principal para construir a UI | `^19.1.0` |
-| | **Vite** | Ferramenta de build e dev server | `^7.1.12` |
-| | **TypeScript** | Linguagem principal do frontend | `~5.8.3` |
-| **Navegação** | **React Router DOM** | Gerenciamento de rotas e páginas | `^6.30.1` |
-| **Estilo** | **Bootstrap** | Framework CSS base | `^5.3.8` |
-| | **React Bootstrap** | Componentes React para Bootstrap | `^2.10.10` |
-| | **Sass** | Pré-processador CSS | `^1.93.2` |
-| **API Tauri** | **@tauri-apps/api**| API JS para chamar o backend Rust | `=2.0.0-rc.11` |
-| | **@tauri-apps/plugin-\*** | APIs JS para os plugins Rust | `=2.0.0-rc.11` |
+| **Core** | **React** | Biblioteca principal para construir a UI | `^18.2.0` |
+| | **Vite** | Ferramenta de build e dev server | `^5.2.10` |
+| | **TypeScript** | Linguagem principal do frontend | `^5.4.5` |
+| **Navegação** | **React Router DOM** | Gerenciamento de rotas e páginas | `^6.23.0` |
+| **Estilo** | **Bootstrap** | Framework CSS base | `^5.3.3` |
+| | **React Bootstrap** | Componentes React para Bootstrap | `^2.10.2` |
+| | **Sass** | Pré-processador CSS | `^1.75.0` |
+| **API Tauri** | **@tauri-apps/api**| API JS para chamar o backend Rust | `^2.0.0-beta.8` |
+| | **@tauri-apps/plugin-* ** | APIs JS para os plugins Rust | (Conforme `package.json`) |
+
 
 ## 📂 Estrutura de Diretórios
 
@@ -108,8 +108,8 @@ A estrutura de diretórios do projeto é organizada para separar as responsabili
 |   |-- components/          # Componentes de UI (reutilizáveis)
 |   |-- pages/               # Páginas/Telas da aplicação (rotas)
 |   |-- router/              # Definição e configuração das rotas
-|   |-- services/            # Lógica de negócio, chamadas de API
-|   |-- store/               # Estado global (Zustand)
+|   |-- assets/              # Imagens, fontes e outros recursos estáticos
+|   |-- styles/              # Ficheiros de estilo (SCSS)
 |   |-- App.tsx              # Componente raiz
 |   |-- main.tsx             # Ponto de entrada do frontend
 |
@@ -119,56 +119,44 @@ A estrutura de diretórios do projeto é organizada para separar as responsabili
 |   |-- src/
 |   |   |-- main.rs          # Ponto de entrada do backend
 |
-|-- flake.nix                # <-- Definição do ambiente de desenvolvimento Nix
-|-- .npmrc                   # <-- Configuração do pnpm para usar a versão correta do Node.js
 |-- package.json             # Dependências do Frontend
 |-- README.md                # Documentação do projeto
 ```
 
 ## 🚀 Começando
 
-Este projeto utiliza o **Nix** para garantir um ambiente de desenvolvimento 100% reprodutível e consistente. Todas as ferramentas e dependências são gerenciadas pelo `flake.nix`.
+Siga estes passos para configurar e executar o ambiente de desenvolvimento.
 
 ### Pré-requisitos
 
-1.  **Instale o Nix**: Siga o [guia oficial de instalação do Nix](https://nixos.org/download.html).
-2.  **Habilite os Flakes**: Adicione a seguinte linha ao seu arquivo de configuração do Nix (localizado em `~/.config/nix/nix.conf` ou `/etc/nix/nix.conf`):
-    ```
-    experimental-features = nix-command flakes
-    ```
+1.  **Instale o Node.js e npm**: Certifique-se de ter o [Node.js](https://nodejs.org/) (versão 18 ou superior) e o npm instalados.
+2.  **Configure o Ambiente Rust**: Siga o [guia oficial de pré-requisitos do Tauri](https://tauri.app/v1/guides/getting-started/prerequisites/) para instalar o Rust e as dependências de sistema necessárias para a sua plataforma (Windows, macOS ou Linux).
 
 ### Instalação e Execução
 
 1.  **Clone o repositório:**
     ```bash
     git clone https://github.com/[seu-usuario]/[seu-repo].git
-    cd dexworld-admin-desktop
+    cd [nome-do-repo]
     ```
 
-2.  **Entre no Ambiente de Desenvolvimento:**
+2.  **Instale as Dependências do Projeto:**
     Na raiz do projeto, execute o comando:
     ```bash
-    nix develop
-    ```
-    O Nix irá baixar e configurar todas as ferramentas necessárias (Rust, Node.js, pnpm, etc.). Ao final do processo, você estará em um shell com tudo o que precisa para o desenvolvimento.
-
-3.  **Instale as Dependências do Projeto:**
-    Dentro do shell do Nix, execute:
-    ```bash
-    pnpm install
+    npm install
     ```
 
-4.  **Execute o Ambiente de Desenvolvimento:**
-    Ainda no shell do Nix, execute:
+3.  **Execute o Ambiente de Desenvolvimento:**
+    Após a instalação, execute:
     ```bash
-    pnpm dev
+    npm run dev
     ```
     O aplicativo Tauri será iniciado em modo de desenvolvimento.
 
-5.  **Compile para Produção:**
+4.  **Compile para Produção:**
     Para compilar a versão final do aplicativo, execute:
     ```bash
-    pnpm tauri build
+    npm run tauri build
     ```
 
 ## ⚖️ Licença
