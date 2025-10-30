@@ -16,8 +16,6 @@ Um painel administrativo desktop seguro e multiplataforma (Windows, macOS, Linux
 - [Stack de Tecnologia](#-stack-de-tecnologia)
 - [Estrutura de Diretórios](#-estrutura-de-diretórios)
 - [Começando](#-começando)
-  - [Pré-requisitos](#pré-requisitos)
-  - [Instalação](#instalação)
 - [Licença](#️-licença)
 
 ## 🎯 Sobre o Projeto
@@ -53,38 +51,52 @@ Nossa abordagem é:
     - **Windows:** Usa `DPAPI` para proteção adicional.
     - **macOS:** Usa o `Keychain` para proteção adicional.
     - **Linux:** Usa o `Secret Service` para proteção adicional.
-2. **Isolamento de Lógica:** A lógica de segurança é estritamente isolada no módulo `core/security/key.manager.ts`, facilitando auditorias e prevenindo vazamentos acidentais para outras partes do app.
+2. **Isolamento de Lógica:** A lógica de segurança é estritamente isolada no backend Rust, expondo apenas os comandos necessários para o frontend.
 3. **Permissões Restritas:** O Tauri é configurado com um conjunto mínimo de permissões de API (definido em `tauri.conf.json`), impedindo que o frontend acesse partes sensíveis do sistema sem autorização explícita.
 4. **(Recomendação Futura):** Suporte para Hardware Wallets (Ledger, Trezor) para assinar transações, eliminando completamente a necessidade de armazenar chaves no software.
 
 ## 🛠️ Stack de Tecnologia
 
-Este projeto utiliza uma arquitetura moderna para garantir performance, segurança e uma ótima experiência de desenvolvimento.
+Esta seção detalha as principais tecnologias e versões utilizadas no projeto, garantindo um ambiente de desenvolvimento consistente. As versões listadas são baseadas nos arquivos `package.json`, `src-tauri/Cargo.toml` e no ambiente Nix.
 
-| Camada | Tecnologia | Versão (Exemplo) | Propósito |
-| :--- | :--- | :--- | :--- |
-| **Core (Desktop)** | [Tauri](https://tauri.app/) | `~1.6.0` | Framework leve e seguro (Rust) |
-| **Frontend (UI)** | [TypeScript](https://www.typescriptlang.org/) | `~5.4.0` | Linguagem principal |
-| **Framework de UI** | [React](https://react.dev/) | `~18.2.0` | Construção da interface |
-| **Estado Global** | [Zustand](https://github.com/pmndrs/zustand) | `~4.5.0` | Gerenciamento de estado |
-| **API (Web)** | [Axios](https://axios-http.com/) | `~1.6.0` | Cliente HTTP |
-| **Blockchain** | [Ethers.js](https://ethers.org/) | `~6.11.0` | Interação com Blockchain |
-| **IPFS** | [ipfs-http-client](https://github.com/ipfs/js-ipfs/tree/master/packages/ipfs-http-client) | `~60.0.0` | Interação com IPFS |
-| **Build** | [Vite](https://vitejs.dev/) | `~5.2.0` | Build do frontend |
+### Ambiente de Desenvolvimento
 
-#### Bibliotecas de UI e Componentes
-
-| Categoria | Biblioteca | Propósito |
+| Tecnologia | Função | Versão Utilizada |
 | :--- | :--- | :--- |
-| **Roteamento** | React Router DOM | Navegação e gerenciamento de rotas no app. |
-| **Gráficos** | ApexCharts | Criação de gráficos interativos e visualizações de dados. |
-| **Calendário** | FullCalendar | Implementação de um calendário completo com eventos. |
-| **Mapas** | React jVectorMap | Renderização de mapas vetoriais interativos. |
-| **Upload de Arquivos** | React Dropzone | Componente para upload de arquivos com "arrastar e soltar". |
-| **Carrosséis** | Swiper | Criação de sliders e carrosséis modernos. |
-| **Seletores de Data** | Flatpickr | Componente leve para seleção de datas e horas. |
-| **Metadados da Página**| React Helmet Async | Gerenciamento do `<head>` do HTML (títulos, meta tags). |
-| **Utilitários de CSS**| clsx + tailwind-merge | Combinação inteligente de classes do Tailwind CSS. |
+| **Nix** | Gerenciador de ambiente de desenvolvimento | (Conforme `flake.nix`) |
+| **Rust** | Linguagem do backend (core do Tauri) | (Conforme `flake.nix`) |
+| **Node.js**| Ambiente de execução para o frontend (Vite, pnpm) | `21.7.2` |
+| **pnpm** | Gerenciador de pacotes do Node.js | (Conforme `flake.nix`) |
+| **Tauri CLI**| Ferramenta de linha de comando para Tauri v2 | `=2.0.0-rc.11` |
+
+### Backend (Rust Crates)
+
+Dependências gerenciadas pelo `src-tauri/Cargo.toml`.
+
+| Dependência (Crate) | Função | Versão |
+| :--- | :--- | :--- |
+| **tauri** | Framework principal do backend nativo | `=2.0.0-rc.11` |
+| **tauri-build** | Ferramenta de compilação do Tauri | `=2.0.0-rc.11` |
+| **tauri-plugin-stronghold** | Armazenamento seguro de chaves | `=2.0.0-rc.11` (com `sqlite`) |
+| **tauri-plugin-http** | Cliente HTTP para o backend Rust | `=2.0.0-rc.11` |
+| **tauri-plugin-shell** | Interação com o shell do SO | `=2.0.0-rc.11` |
+| **serde / serde_json** | Serialização/Desserialização de dados | `1.0` |
+
+### Frontend (JavaScript/TypeScript)
+
+Dependências gerenciadas pelo `package.json`.
+
+| Categoria | Dependência | Função | Versão |
+| :--- | :--- | :--- | :--- |
+| **Core** | **React** | Biblioteca principal para construir a UI | `^19.1.0` |
+| | **Vite** | Ferramenta de build e dev server | `^7.1.12` |
+| | **TypeScript** | Linguagem principal do frontend | `~5.8.3` |
+| **Navegação** | **React Router DOM** | Gerenciamento de rotas e páginas | `^6.30.1` |
+| **Estilo** | **Bootstrap** | Framework CSS base | `^5.3.8` |
+| | **React Bootstrap** | Componentes React para Bootstrap | `^2.10.10` |
+| | **Sass** | Pré-processador CSS | `^1.93.2` |
+| **API Tauri** | **@tauri-apps/api**| API JS para chamar o backend Rust | `=2.0.0-rc.11` |
+| | **@tauri-apps/plugin-\*** | APIs JS para os plugins Rust | `=2.0.0-rc.11` |
 
 ## 📂 Estrutura de Diretórios
 
@@ -92,131 +104,73 @@ A estrutura de diretórios do projeto é organizada para separar as responsabili
 
 ```shell
 /
-|-- .storybook/            # Configuração do Storybook (para isolar componentes de UI)
-|-- cypress/               # Testes End-to-End (E2E)
-|
 |-- src/                     # <-- Frontend Code (TypeScript/React)
-|   |-- assets/              # Ativos estáticos (imagens, svgs)
-|   |-- components/          # Componentes de UI
-|   |   |-- ui/                # Componentes puros (Button, Modal, Input)
-|   |   |   |-- Button.tsx
-|   |   |   |-- Button.test.tsx  # <-- Teste unitário (ex: Vitest)
-|   |   |   |-- Button.stories.tsx # <-- Storybook
-|   |   |-- shared/            # Componentes compostos e compartilhados (PageMeta)
-|   |   |-- features/          # Componentes de domínio de negócio (ecommerce/)
-|   |
-|   |-- contexts/            # Provedores de Contexto React
-|   |-- hooks/               # Hooks customizados (useModal)
-|   |-- icons/               # Ícones em formato de componentes SVG
-|   |-- layouts/             # Estrutura principal do layout (Sidebar, Header)
-|   |-- locales/             # Arquivos de tradução (i18n)
-|   |   |-- en-US.json
-|   |   |-- pt-BR.json
-|   |
+|   |-- components/          # Componentes de UI (reutilizáveis)
 |   |-- pages/               # Páginas/Telas da aplicação (rotas)
-|   |   |-- dashboard/
-|   |   |   |-- index.tsx
-|   |
-|   |-- router/              # Definição e configuração das rotas (React Router)
-|   |   |-- index.tsx
-|   |
-|   |-- services/            # Lógica de negócio, chamadas de API (blockchain.service.ts)
-|   |-- store/               # Estado global (Zustand, Redux)
-|   |   |-- userSlice.ts
-|   |
-|   |-- types/               # Tipos e interfaces globais (user.types.ts)
-|   |-- utils/               # Funções puras e helpers (formatDate)
-|   |
-|   |-- App.tsx              # Componente raiz (geralmente carrega o router)
+|   |-- router/              # Definição e configuração das rotas
+|   |-- services/            # Lógica de negócio, chamadas de API
+|   |-- store/               # Estado global (Zustand)
+|   |-- App.tsx              # Componente raiz
 |   |-- main.tsx             # Ponto de entrada do frontend
-|   |-- index.css            # Estilos globais e Tailwind
 |
 |-- src-tauri/               # <-- Backend Code (Rust)
-|   |-- ... (Estrutura padrão do Tauri)
+|   |-- Cargo.toml           # Dependências do Rust
+|   |-- tauri.conf.json      # Configuração da aplicação Tauri
+|   |-- src/
+|   |   |-- main.rs          # Ponto de entrada do backend
 |
-|-- .env.example             # Modelo de variáveis de ambiente
-|-- .eslintrc.json           # Configuração do ESLint (qualidade de código)
-|-- .gitignore
-|-- .prettierrc              # Configuração do Prettier (formatação de código)
-|-- package.json
-|-- tsconfig.json
-|-- vite.config.ts
-|-- vitest.config.ts         # Configuração do Vitest (testes unitários)
+|-- flake.nix                # <-- Definição do ambiente de desenvolvimento Nix
+|-- .npmrc                   # <-- Configuração do pnpm para usar a versão correta do Node.js
+|-- package.json             # Dependências do Frontend
+|-- README.md                # Documentação do projeto
 ```
 
 ## 🚀 Começando
 
-Siga estas etapas para configurar o ambiente de desenvolvimento.
+Este projeto utiliza o **Nix** para garantir um ambiente de desenvolvimento 100% reprodutível e consistente. Todas as ferramentas e dependências são gerenciadas pelo `flake.nix`.
 
 ### Pré-requisitos
 
-Existem duas maneiras de configurar o ambiente: a **recomendada (com Nix)** e a manual.
+1.  **Instale o Nix**: Siga o [guia oficial de instalação do Nix](https://nixos.org/download.html).
+2.  **Habilite os Flakes**: Adicione a seguinte linha ao seu arquivo de configuração do Nix (localizado em `~/.config/nix/nix.conf` ou `/etc/nix/nix.conf`):
+    ```
+    experimental-features = nix-command flakes
+    ```
 
-#### Método Recomendado: Usando Nix
+### Instalação e Execução
 
-O projeto inclui um arquivo `flake.nix` que cria um ambiente de desenvolvimento 100% reprodutível com todas as dependências necessárias (Rust, Node.js, bibliotecas de sistema do Tauri, etc.).
+1.  **Clone o repositório:**
+    ```bash
+    git clone https://github.com/[seu-usuario]/[seu-repo].git
+    cd dexworld-admin-desktop
+    ```
 
-1. **Instale o Nix**: Siga o guia oficial de instalação do Nix.
-2. **Habilite os Flakes**: Adicione `experimental-features = nix-command flakes` ao seu arquivo de configuração do Nix (`~/.config/nix/nix.conf` ou `/etc/nix/nix.conf`).
-3. **Entre no Ambiente**: Na raiz do projeto, execute o comando:
-
+2.  **Entre no Ambiente de Desenvolvimento:**
+    Na raiz do projeto, execute o comando:
     ```bash
     nix develop
     ```
+    O Nix irá baixar e configurar todas as ferramentas necessárias (Rust, Node.js, pnpm, etc.). Ao final do processo, você estará em um shell com tudo o que precisa para o desenvolvimento.
 
-    O Nix irá baixar e configurar todas as ferramentas. Você estará em um shell pronto para o desenvolvimento.
-
-> **Dica:** Para carregar o ambiente automaticamente ao entrar na pasta, instale o direnv e execute `direnv allow` uma vez na raiz do projeto.
-
-#### Método Manual
-
-Se você não usa Nix, precisará do seguinte software instalado em sua máquina:
-
-1. **Rust** e suas ferramentas de build.
-2. **Node.js**: Versão **18.x** ou **20.x (LTS)** ou superior.
-    - O ambiente Nix está configurado para usar a **versão 20.x**. Recomendamos o uso do nvm (Node Version Manager) para gerenciar as versões do Node.js.
-3. **Dependências de Sistema do Tauri**: Siga o guia oficial para o seu sistema operacional.
-    - O guia oficial do Tauri é a melhor fonte: **[Tauri Prerequisites](https://tauri.app/v1/guides/getting-started/prerequisites)**
-
-### Instalação
-
-1. Clone o repositório:
-
-    ```bash
-    git clone https://github.com/[seu-usuario]/[seu-repo].git
-    cd DEXWORLD
-    ```
-
-2. **(Se usando o método manual) Verifique e configure a versão do Node.js**:
-
-    ```bash
-    # Verifique sua versão atual
-    node -v # Deve ser v20.x.x ou superior
-    # Se não for a v18+, instale e use uma versão LTS com o nvm:
-    nvm install 20
-    nvm use 20
-    ```
-
-3. **Instale as dependências do projeto** (dentro do shell do Nix ou após a configuração manual):
-
+3.  **Instale as Dependências do Projeto:**
+    Dentro do shell do Nix, execute:
     ```bash
     pnpm install
     ```
 
-4. **Execute o ambiente de desenvolvimento**:
-
+4.  **Execute o Ambiente de Desenvolvimento:**
+    Ainda no shell do Nix, execute:
     ```bash
-    pnpm tauri dev
+    pnpm dev
     ```
+    O aplicativo Tauri será iniciado em modo de desenvolvimento.
 
-    > **Nota:** Estamos usando `pnpm` para maior confiabilidade no gerenciamento de dependências.
-
-5. **Para compilar a versão final (produção)**:
-
+5.  **Compile para Produção:**
+    Para compilar a versão final do aplicativo, execute:
     ```bash
-    npm run tauri build
+    pnpm tauri build
     ```
 
 ## ⚖️ Licença
 
-Este projeto está licenciado sob a Licença MIT. Veja o arquivo `LICENSE` para mais detalhes.
+Este projeto está licenciado sob a Licença MIT.

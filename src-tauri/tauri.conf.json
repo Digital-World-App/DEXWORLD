@@ -4,7 +4,6 @@
   "version": "0.1.0",
   "identifier": "com.dexworld",
   "build": {
-    "beforeDevCommand": "pnpm dev",
     "devUrl": "http://localhost:1420",
     "beforeBuildCommand": "pnpm build",
     "frontendDist": "../dist"
@@ -19,28 +18,12 @@
     ],
     "security": {
       "csp": null,
-      "allowlist": {
-        "all": false,
-        "http": {
-          "all": true,
-          "scope": [
-            "https://*.exemplo.com/api/*"
-          ]
-        },
-        "shell": {
-          "all": false,
-          "open": true
-        },
-        "stronghold": {
-          "all": true
-        },
-        "window": {
-          "all": true
-        },
-        "opener": {
-          "all": true
-        }
-      }
+      "capabilities": [
+        "http:default",
+        "shell:open",
+        "stronghold:default",
+        "opener:open"
+      ]
     }
   },
   "bundle": {
@@ -53,5 +36,15 @@
       "icons/icon.icns",
       "icons/icon.ico"
     ]
+  },
+  "plugins": {
+    "http": {
+      "scope": [
+        "https://*.exemplo.com/api/*"
+      ]
+    },
+    "shell": {},
+    "stronghold": {},
+    "opener": {}
   }
 }
